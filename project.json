@@ -23,8 +23,8 @@
             "input": "public"
           }
         ],
-        "styles": ["./src/styles.scss"],
-        "scripts": []
+        "styles": ["node_modules/bootstrap/scss/bootstrap.scss", "./src/styles.scss"],
+        "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
       },
       "configurations": {
         "production": {
@@ -78,7 +78,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectName}"],
       "options": {
-        "jestConfig": "jest.config.ts"
+        "jestConfig": "jest.config.app.ts"
       }
     },
     "serve-static": {
