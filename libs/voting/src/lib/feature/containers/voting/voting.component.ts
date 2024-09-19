@@ -1,25 +1,36 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { NonNullableFormBuilder } from '@angular/forms';
 import { MatDividerModule } from '@angular/material/divider';
-import { VoteComponent } from '../../../ui/vote.component';
-import { VotingTableComponent } from '../../../ui/voting-table/voting-table.component';
-import { Candidate, Voter } from '../../../util/models/voting-models';
+import { combineLatest, map, tap } from 'rxjs';
+import { ApiService } from '../../../data-access/services/api/api.service';
+import { CandidatesTableComponent } from '../../../ui/candidates-table/candidates-table.component';
+import { VoteComponent } from '../../../ui/vote/vote.component';
+import { VotersTableComponent } from '../../../ui/voters-table/voters-table.component';
+import { ElectionParticipantsForm } from '../../../util/models/voting-types';
+import { Candidate, ElectionParticipants, Voter } from './../../../util/models/voting-models';
 
 @Component({
   selector: 'lib-voting',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, VotingTableComponent, VoteComponent],
+  imports: [CommonModule, MatDividerModule, VotersTableComponent, CandidatesTableComponent, VoteComponent],
   templateUrl: './voting.component.html',
   styleUrl: './voting.component.scss'
 })
 export class VotingComponent {
-  public voters: Voter[] = [
-    { name: 'Alek', voted: true },
-    { name: 'Bob', voted: false }
-  ];
+  constructor(private readonly apiService: ApiService, private fb: NonNullableFormBuilder) {}
 
-  public candidates: Candidate[] = [
-    { name: 'Alek candidate', votes: 0 },
-    { name: 'Bob candidate', votes: 0 }
-  ];
+  public electionParticipantsForm?: ElectionParticipantsForm;
+
+  public vm$ = combineLatest([this.apiService.getAllVoters(), this.apiService.getAllCandidates()]).pipe(
+    map(([voters, candidates]) => ({ voters, candidates } as ElectionParticipants)),
+    tap((electionParticipants) => this.createForm(electionParticipants))
+  );
+
+  private createForm(electionParticipants: ElectionParticipants) {
+    this.electionParticipantsForm = this.fb.group({
+      voters: this.fb.array(electionParticipants.voters.map((voter) => this.fb.group<Voter>(voter))),
+      candidates: this.fb.array(electionParticipants.candidates.map((candidate) => this.fb.group<Candidate>(candidate)))
+    });
+  }
 }

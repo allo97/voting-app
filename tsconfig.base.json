@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "useDefineForClassFields": false,
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,

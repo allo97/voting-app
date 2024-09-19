@@ -1,0 +1,31 @@
+@if(electionParticipantsForm) {
+<form [formGroup]="form">
+  <div class="row">
+    <div class="col">
+      <mat-form-field>
+        <mat-label>I am</mat-label>
+        <mat-select formControlName="voter">
+          @for (voter of electionParticipantsForm.controls.voters.value; track voter.name) {
+          <mat-option [value]="voter.name">{{ voter.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <mat-form-field>
+        <mat-label>I vote for</mat-label>
+        <mat-select formControlName="candidate">
+          @for (candidate of electionParticipantsForm.controls.candidates.value; track candidate.name) {
+          <mat-option [value]="candidate.name">{{ candidate.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col">
+      <button mat-raised-button (click)="vote()">Vote!</button>
+    </div>
+  </div>
+</form>
+}

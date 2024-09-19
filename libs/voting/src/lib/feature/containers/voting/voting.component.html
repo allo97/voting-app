@@ -3,18 +3,15 @@
     <h1>Voting app</h1>
   </div>
 
+  @if (vm$ | async; as vm) {
   <h2>Voters and Candidates</h2>
 
   <div class="row my-5">
     <div class="col">
-      <lib-voting-table [data]="voters" title="Voters" [displayedColumns]="['name', 'voted']"></lib-voting-table>
+      <lib-voters-table [electionParticipantsForm]="electionParticipantsForm"></lib-voters-table>
     </div>
     <div class="col">
-      <lib-voting-table
-        [data]="candidates"
-        title="Candidates"
-        [displayedColumns]="['name', 'votes']"
-      ></lib-voting-table>
+      <lib-candidates-table [electionParticipantsForm]="electionParticipantsForm"></lib-candidates-table>
     </div>
   </div>
 
@@ -22,8 +19,9 @@
 
   <div class="my-5">
     <h2>Vote!</h2>
-    <div class="col-6">
-      <lib-vote [voters]="voters" [candidates]="candidates"></lib-vote>
+    <div class="col-4">
+      <lib-vote [electionParticipantsForm]="electionParticipantsForm"></lib-vote>
     </div>
   </div>
+  }
 </div>
