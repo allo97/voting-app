@@ -1,0 +1,34 @@
+<div class="container-fluid">
+  <div class="text-center">
+    <h1>Voting app</h1>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="demo-button-container">
+        <button mat-raised-button (click)="addData()" class="demo-button">Add data</button>
+        <button mat-raised-button [disabled]="!dataSource.length" (click)="removeData()" class="demo-button">
+          Remove data
+        </button>
+      </div>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
+        <!-- Position Column -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="voted">
+          <th mat-header-cell *matHeaderCellDef>Voted</th>
+          <td mat-cell *matCellDef="let element">{{ element.voted }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <div class="col">2 of 2</div>
+  </div>
+</div>

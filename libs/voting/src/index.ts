@@ -1,1 +1,1 @@
-export * from './lib/voting/voting.component';
+export * from './lib/feature/containers/voting/voting.component';
