@@ -7,6 +7,6 @@ export interface Voter extends Person {
   voted: boolean;
 }
 
-export interface Candicate {
-  votes: number[];
+export interface Candidate extends Person {
+  votes: number;
 }

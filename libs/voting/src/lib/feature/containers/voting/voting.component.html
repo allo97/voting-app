@@ -3,32 +3,27 @@
     <h1>Voting app</h1>
   </div>
 
-  <div class="row">
+  <h2>Voters and Candidates</h2>
+
+  <div class="row my-5">
     <div class="col">
-      <div class="demo-button-container">
-        <button mat-raised-button (click)="addData()" class="demo-button">Add data</button>
-        <button mat-raised-button [disabled]="!dataSource.length" (click)="removeData()" class="demo-button">
-          Remove data
-        </button>
-      </div>
-
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 demo-table">
-        <!-- Position Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
-          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="voted">
-          <th mat-header-cell *matHeaderCellDef>Voted</th>
-          <td mat-cell *matCellDef="let element">{{ element.voted }}</td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      </table>
+      <lib-voting-table [data]="voters" title="Voters" [displayedColumns]="['name', 'voted']"></lib-voting-table>
     </div>
-    <div class="col">2 of 2</div>
+    <div class="col">
+      <lib-voting-table
+        [data]="candidates"
+        title="Candidates"
+        [displayedColumns]="['name', 'votes']"
+      ></lib-voting-table>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="my-5">
+    <h2>Vote!</h2>
+    <div class="col-6">
+      <lib-vote [voters]="voters" [candidates]="candidates"></lib-vote>
+    </div>
   </div>
 </div>
