@@ -36,11 +36,8 @@ export class VoteComponent {
     }
 
     if (this.candidatesState$) {
-      console.log(this.candidatesState$.value);
       const candidates = this.candidatesState$?.value;
       const index = candidates?.findIndex((candidate) => candidate.name === this.candidateName);
-      console.log(index);
-      console.log(this.candidateName);
       if (index > -1) {
         candidates[index].votes = candidates[index].votes + 1;
 

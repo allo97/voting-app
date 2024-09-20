@@ -6,7 +6,7 @@ import { ApiService } from '../../../data-access/services/api/api.service';
 import { CandidatesTableComponent } from '../../../ui/candidates-table/candidates-table.component';
 import { VoteComponent } from '../../../ui/vote/vote.component';
 import { VotersTableComponent } from '../../../ui/voters-table/voters-table.component';
-import { Candidate, Voter } from './../../../util/models/voting-models';
+import { Candidate, ElectionParticipants, Voter } from './../../../util/models/voting-models';
 
 @Component({
   selector: 'lib-voting',
@@ -23,13 +23,17 @@ export class VotingComponent implements OnInit {
     this.votersState$.subscribe((data) => {
       console.log(data);
     });
+
+    this.candidatesState$.subscribe((data) => {
+      console.log(data);
+    });
   }
 
   public votersState$ = new BehaviorSubject<Voter[]>([]);
   public candidatesState$ = new BehaviorSubject<Candidate[]>([]);
 
   public vm$ = combineLatest([this.apiService.getAllVoters(), this.apiService.getAllCandidates()]).pipe(
-    map(([voters, candidates]) => ({ voters, candidates })),
+    map(([voters, candidates]) => ({ voters, candidates } as ElectionParticipants)),
     tap((electionParticipants) => {
       this.votersState$.next(electionParticipants.voters);
       this.candidatesState$.next(electionParticipants.candidates);
