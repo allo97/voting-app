@@ -10,8 +10,3 @@ export interface Voter extends Person {
 export interface Candidate extends Person {
   votes: number;
 }
-
-export interface ElectionParticipants {
-  voters: Voter[];
-  candidates: Candidate[];
-}

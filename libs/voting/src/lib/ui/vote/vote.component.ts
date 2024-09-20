@@ -1,49 +1,51 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ElectionParticipantsForm } from '../../util/models/voting-types';
+import { BehaviorSubject } from 'rxjs';
+import { Voter } from '../../util/models/voting-models';
+import { Candidate } from './../../util/models/voting-models';
 
 @Component({
   selector: 'lib-vote',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    FormsModule,
-    MatButtonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatButtonModule],
   templateUrl: './vote.component.html',
-  styleUrl: './vote.component.scss'
+  styleUrl: './vote.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VoteComponent {
-  @Input({ required: true }) public electionParticipantsForm?: ElectionParticipantsForm;
+  @Input({ required: true }) public votersState$?: BehaviorSubject<Voter[]>;
+  @Input({ required: true }) public candidatesState$?: BehaviorSubject<Candidate[]>;
 
-  public form = new FormGroup({
-    voter: new FormControl(''),
-    candidate: new FormControl('')
-  });
+  public voterName = '';
+  public candidateName = '';
 
   public vote() {
-    const voters = this.electionParticipantsForm?.value.voters;
-    voters?.find((v) => v.name === this.form.value.voter);
+    if (this.votersState$) {
+      const voters = this.votersState$?.value;
+      const index = voters?.findIndex((voter) => voter.name === this.voterName);
+      if (index > -1) {
+        voters[index].voted = true;
 
-    const voter = this.electionParticipantsForm?.controls.voters.controls.find(
-      (x) => x.value.name === this.form.value.voter
-    );
-    voter?.controls.voted.setValue(true);
+        this.votersState$?.next(voters);
+      }
+    }
 
-    const candidate = this.electionParticipantsForm?.controls.candidates.controls.find(
-      (x) => x.value.name === this.form.value.candidate
-    );
-    candidate?.controls.votes.setValue((candidate.value.votes ?? 0) + 1);
+    if (this.candidatesState$) {
+      console.log(this.candidatesState$.value);
+      const candidates = this.candidatesState$?.value;
+      const index = candidates?.findIndex((candidate) => candidate.name === this.candidateName);
+      console.log(index);
+      console.log(this.candidateName);
+      if (index > -1) {
+        candidates[index].votes = candidates[index].votes + 1;
 
-    if (this.electionParticipantsForm) console.log(this.electionParticipantsForm.value);
+        this.candidatesState$?.next(candidates);
+      }
+    }
   }
 }

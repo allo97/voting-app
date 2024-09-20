@@ -8,10 +8,10 @@
 
   <div class="row my-5">
     <div class="col">
-      <lib-voters-table [electionParticipantsForm]="electionParticipantsForm"></lib-voters-table>
+      <lib-voters-table [dataSource$]="votersState$"></lib-voters-table>
     </div>
     <div class="col">
-      <lib-candidates-table [electionParticipantsForm]="electionParticipantsForm"></lib-candidates-table>
+      <lib-candidates-table [dataSource$]="candidatesState$"></lib-candidates-table>
     </div>
   </div>
 
@@ -20,7 +20,7 @@
   <div class="my-5">
     <h2>Vote!</h2>
     <div class="col-4">
-      <lib-vote [electionParticipantsForm]="electionParticipantsForm"></lib-vote>
+      <lib-vote [votersState$]="votersState$" [candidatesState$]="candidatesState$"></lib-vote>
     </div>
   </div>
   }
