@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,12 +17,19 @@ import { Candidate } from './../../util/models/voting-models';
   styleUrl: './vote.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VoteComponent {
+export class VoteComponent implements OnInit {
   @Input({ required: true }) public votersState$?: BehaviorSubject<Voter[]>;
   @Input({ required: true }) public candidatesState$?: BehaviorSubject<Candidate[]>;
 
+  @Output() public updateVoter = new EventEmitter<Voter>();
+
   public voterName = '';
   public candidateName = '';
+
+  public ngOnInit(): void {
+    this.voterName = this.votersState$?.value[0]?.name ?? '';
+    this.candidateName = this.candidatesState$?.value[0]?.name ?? '';
+  }
 
   public vote() {
     if (this.votersState$) {
@@ -30,8 +37,7 @@ export class VoteComponent {
       const index = voters?.findIndex((voter) => voter.name === this.voterName);
       if (index > -1) {
         voters[index].voted = true;
-
-        this.votersState$?.next(voters);
+        this.updateVoter.emit(voters[index]);
       }
     }
 

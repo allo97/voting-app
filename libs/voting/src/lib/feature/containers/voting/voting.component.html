@@ -8,7 +8,12 @@
 
   <div class="row my-5">
     <div class="col">
-      <lib-voters-table [dataSource$]="votersState$"></lib-voters-table>
+      <lib-voters-table
+        [dataSource$]="votersState$"
+        (add)="addVoter($event)"
+        (remove)="removeVoter($event)"
+        (update)="updateVoter($event)"
+      ></lib-voters-table>
     </div>
     <div class="col">
       <lib-candidates-table [dataSource$]="candidatesState$"></lib-candidates-table>
@@ -20,7 +25,11 @@
   <div class="my-5">
     <h2>Vote!</h2>
     <div class="col-4">
-      <lib-vote [votersState$]="votersState$" [candidatesState$]="candidatesState$"></lib-vote>
+      <lib-vote
+        [votersState$]="votersState$"
+        (updateVoter)="updateVoter($event)"
+        [candidatesState$]="candidatesState$"
+      ></lib-vote>
     </div>
   </div>
   }
