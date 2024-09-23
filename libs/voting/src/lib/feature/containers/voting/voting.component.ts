@@ -70,4 +70,32 @@ export class VotingComponent implements OnInit {
           this.votersState$?.next(this.votersState$.value);
         });
   }
+
+  public addCandidate(candidate: Candidate) {
+    this.apiService
+      .createCandidate(candidate)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((newCandidate) => {
+        this.candidatesState$?.next([...this.candidatesState$.value, newCandidate]);
+      });
+  }
+
+  public removeCandidate(id: number) {
+    this.apiService
+      .deleteCandidate(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.candidatesState$?.next([...this.candidatesState$.value.slice(0, -1)]);
+      });
+  }
+
+  public updateCandidate(candidate: Candidate) {
+    if (candidate.id)
+      this.apiService
+        .updateCandidate(candidate.id, candidate)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => {
+          this.candidatesState$?.next(this.candidatesState$.value);
+        });
+  }
 }

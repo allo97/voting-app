@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,25 +27,29 @@ import { Candidate } from './../../util/models/voting-models';
 })
 export class CandidatesTableComponent {
   @Input() public dataSource$?: BehaviorSubject<Candidate[]>;
+  @Output() public add = new EventEmitter<Candidate>();
+  @Output() public remove = new EventEmitter<number>();
+  @Output() public update = new EventEmitter<Candidate>();
 
   @ViewChild(MatTable) private table?: MatTable<Candidate>;
 
   public title = 'Candidates';
   public displayedColumns: string[] = ['name', 'votes'];
 
-  public changeInput(element: Candidate, value: string) {
-    element.name = value;
-    this.dataSource$?.next(this.dataSource$.value);
-  }
-
   public addRow() {
     const newCandidate = { name: '', votes: 0 } as Candidate;
-    this.dataSource$?.next([...this.dataSource$.value, newCandidate]);
+    this.add.emit(newCandidate);
     this.table?.renderRows();
   }
 
-  public removeRow() {
-    this.dataSource$?.next([...this.dataSource$.value.slice(0, -1)]);
+  public removeLastRow() {
+    const candidate = this.dataSource$?.value[this.dataSource$?.value.length - 1];
+    this.remove.emit(candidate?.id);
     this.table?.renderRows();
+  }
+
+  public updateRow(row: Candidate, value: string) {
+    row.name = value;
+    this.update.emit(row);
   }
 }

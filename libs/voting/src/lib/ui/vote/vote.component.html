@@ -2,9 +2,9 @@
   <div class="col">
     <mat-form-field>
       <mat-label>I am</mat-label>
-      <mat-select [(ngModel)]="voterName">
+      <mat-select [(ngModel)]="voterId">
         @for (voter of votersState$ | async; track voter.id) {
-        <mat-option [value]="voter.name">{{ voter.name }}</mat-option>
+        <mat-option [value]="voter.id">{{ voter.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -13,9 +13,9 @@
   <div class="col">
     <mat-form-field>
       <mat-label>I vote for</mat-label>
-      <mat-select [(ngModel)]="candidateName">
+      <mat-select [(ngModel)]="candidateId">
         @for (candidate of candidatesState$ | async; track candidate.id) {
-        <mat-option [value]="candidate.name">{{ candidate.name }}</mat-option>
+        <mat-option [value]="candidate.id">{{ candidate.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>

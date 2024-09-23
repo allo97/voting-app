@@ -22,19 +22,20 @@ export class VoteComponent implements OnInit {
   @Input({ required: true }) public candidatesState$?: BehaviorSubject<Candidate[]>;
 
   @Output() public updateVoter = new EventEmitter<Voter>();
+  @Output() public updateCandidate = new EventEmitter<Candidate>();
 
-  public voterName = '';
-  public candidateName = '';
+  public voterId?: number;
+  public candidateId?: number;
 
   public ngOnInit(): void {
-    this.voterName = this.votersState$?.value[0]?.name ?? '';
-    this.candidateName = this.candidatesState$?.value[0]?.name ?? '';
+    this.voterId = this.votersState$?.value[0]?.id;
+    this.candidateId = this.candidatesState$?.value[0]?.id;
   }
 
   public vote() {
     if (this.votersState$) {
       const voters = this.votersState$?.value;
-      const index = voters?.findIndex((voter) => voter.name === this.voterName);
+      const index = voters?.findIndex((voter) => voter.id === this.voterId);
       if (index > -1) {
         voters[index].voted = true;
         this.updateVoter.emit(voters[index]);
@@ -43,11 +44,11 @@ export class VoteComponent implements OnInit {
 
     if (this.candidatesState$) {
       const candidates = this.candidatesState$?.value;
-      const index = candidates?.findIndex((candidate) => candidate.name === this.candidateName);
+      const index = candidates?.findIndex((candidate) => candidate.id === this.candidateId);
       if (index > -1) {
         candidates[index].votes = candidates[index].votes + 1;
 
-        this.candidatesState$?.next(candidates);
+        this.updateCandidate.emit(candidates[index]);
       }
     }
   }

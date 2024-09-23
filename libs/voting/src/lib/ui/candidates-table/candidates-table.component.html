@@ -1,7 +1,7 @@
 <mat-card appearance="outlined">
   <mat-card-actions align="end">
     <button mat-raised-button (click)="addRow()" class="button">Add</button>
-    <button mat-raised-button (click)="removeRow()" class="button">Remove</button>
+    <button mat-raised-button (click)="removeLastRow()" class="button">Remove</button>
   </mat-card-actions>
   <mat-card-header class="card-header">
     <mat-card-title>{{ title }}</mat-card-title>
@@ -12,7 +12,7 @@
         <th mat-header-cell *matHeaderCellDef>Name</th>
         <td mat-cell *matCellDef="let element; let index = index">
           <mat-form-field>
-            <input #input (selectionchange)="changeInput(element, input.value)" matInput [value]="element.name" />
+            <input #input (selectionchange)="updateRow(element, input.value)" matInput [value]="element.name" />
           </mat-form-field>
         </td>
       </ng-container>

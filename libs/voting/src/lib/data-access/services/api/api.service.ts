@@ -33,4 +33,9 @@ export class ApiService {
 
   public createCandidate = (candidate: Candidate): Observable<Candidate> =>
     this.http.post<Candidate>(`${config.candidateApi}`, candidate);
+
+  public updateCandidate = (id: number, candidate: Candidate): Observable<void> =>
+    this.http.put<void>(`${config.candidateApi}/${id}`, candidate);
+
+  public deleteCandidate = (id: number): Observable<void> => this.http.delete<void>(`${config.candidateApi}/${id}`);
 }
