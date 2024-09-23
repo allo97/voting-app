@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { VotingContainerComponent } from './voting-container.component';
 
@@ -7,7 +8,8 @@ describe('VotingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VotingContainerComponent]
+      imports: [VotingContainerComponent],
+      providers: [provideHttpClient()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(VotingContainerComponent);
