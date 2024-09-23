@@ -6,7 +6,8 @@ import { Candidate } from './../../../util/models/voting-models';
 
 const config = {
   voterApi: 'http://localhost:5046/api/voter',
-  candidateApi: 'http://localhost:5046/api/candidate'
+  candidateApi: 'http://localhost:5046/api/candidate',
+  api: 'http://localhost:5046/api/'
 };
 
 @Injectable({
@@ -38,4 +39,18 @@ export class ApiService {
     this.http.put<void>(`${config.candidateApi}/${id}`, candidate);
 
   public deleteCandidate = (id: number): Observable<void> => this.http.delete<void>(`${config.candidateApi}/${id}`);
+
+  public getAll = (route: string): Observable<Voter[]> => this.http.get<Voter[]>(`${config.api}/${route}`);
+
+  public getById = (id: number, route: string): Observable<Voter> =>
+    this.http.get<Voter>(`${config.api}/${route}/${id}`);
+
+  public create = (voter: Voter, route: string): Observable<Voter> =>
+    this.http.post<Voter>(`${config.api}/${route}`, voter);
+
+  public update = (id: number, voter: Voter, route: string): Observable<void> =>
+    this.http.put<void>(`${config.api}/${route}/${id}`, voter);
+
+  public delete = (id: number, route: string): Observable<void> =>
+    this.http.delete<void>(`${config.api}/${route}/${id}`);
 }

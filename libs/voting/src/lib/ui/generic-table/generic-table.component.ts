@@ -7,10 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { BehaviorSubject } from 'rxjs';
-import { Candidate } from './../../util/models/voting-models';
+import { Person } from '../../util/models/voting-models';
 
 @Component({
-  selector: 'lib-candidates-table',
+  selector: 'lib-generic-table',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,34 +21,34 @@ import { Candidate } from './../../util/models/voting-models';
     MatFormFieldModule,
     MatInputModule
   ],
-  templateUrl: './candidates-table.component.html',
-  styleUrl: './candidates-table.component.scss',
+  templateUrl: './generic-table.component.html',
+  styleUrl: './generic-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CandidatesTableComponent {
-  @Input() public dataSource$?: BehaviorSubject<Candidate[]>;
-  @Output() public add = new EventEmitter<Candidate>();
+export class GenericTableComponent<T extends Person> {
+  @Input({ required: true }) public dataSource$?: BehaviorSubject<T[]>;
+  @Input({ required: true }) public newRow?: T;
+  @Input({ required: true }) public title = '';
+  @Input({ required: true }) public displayedColumns: string[] = [];
+
+  @Output() public add = new EventEmitter<T>();
   @Output() public remove = new EventEmitter<number>();
-  @Output() public update = new EventEmitter<Candidate>();
+  @Output() public update = new EventEmitter<T>();
 
-  @ViewChild(MatTable) private table?: MatTable<Candidate>;
-
-  public title = 'Candidates';
-  public displayedColumns: string[] = ['name', 'votes'];
+  @ViewChild(MatTable) private table?: MatTable<T>;
 
   public addRow() {
-    const newCandidate = { name: '', votes: 0 } as Candidate;
-    this.add.emit(newCandidate);
+    this.add.emit(this.newRow);
     this.table?.renderRows();
   }
 
   public removeLastRow() {
-    const candidate = this.dataSource$?.value[this.dataSource$?.value.length - 1];
-    this.remove.emit(candidate?.id);
+    const voter = this.dataSource$?.value[this.dataSource$?.value.length - 1];
+    this.remove.emit(voter?.id);
     this.table?.renderRows();
   }
 
-  public updateRow(row: Candidate, value: string) {
+  public updateRow(row: T, value: string) {
     row.name = value;
     this.update.emit(row);
   }

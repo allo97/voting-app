@@ -8,20 +8,26 @@
 
   <div class="row my-5">
     <div class="col">
-      <lib-voters-table
+      <lib-generic-table
         [dataSource$]="votersState$"
+        [newRow]="{ name: '', voted: false }"
+        title="Voters"
+        [displayedColumns]="['name', 'voted']"
         (add)="addVoter($event)"
         (remove)="removeVoter($event)"
         (update)="updateVoter($event)"
-      ></lib-voters-table>
+      ></lib-generic-table>
     </div>
     <div class="col">
-      <lib-candidates-table
+      <lib-generic-table
         [dataSource$]="candidatesState$"
+        [newRow]="{ name: '', votes: 0 }"
+        title="Candidates"
+        [displayedColumns]="['name', 'votes']"
         (add)="addCandidate($event)"
         (remove)="removeCandidate($event)"
         (update)="updateCandidate($event)"
-      ></lib-candidates-table>
+      ></lib-generic-table>
     </div>
   </div>
 
