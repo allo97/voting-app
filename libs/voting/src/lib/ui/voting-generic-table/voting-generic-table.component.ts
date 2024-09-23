@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Person } from '../../util/models/voting-models';
 
 @Component({
-  selector: 'lib-generic-table',
+  selector: 'lib-voting-generic-table',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,11 +21,11 @@ import { Person } from '../../util/models/voting-models';
     MatFormFieldModule,
     MatInputModule
   ],
-  templateUrl: './generic-table.component.html',
-  styleUrl: './generic-table.component.scss',
+  templateUrl: './voting-generic-table.component.html',
+  styleUrl: './voting-generic-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GenericTableComponent<T extends Person> {
+export class VotingGenericTableComponent<T extends Person> {
   @Input({ required: true }) public dataSource$?: BehaviorSubject<T[]>;
   @Input({ required: true }) public newRow?: T;
   @Input({ required: true }) public title = '';

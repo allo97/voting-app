@@ -4,14 +4,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { BehaviorSubject, combineLatest, map, tap } from 'rxjs';
 import { ApiService } from '../../../data-access/services/api/api.service';
-import { GenericTableComponent } from '../../../ui/generic-table/generic-table.component';
 import { VoteComponent } from '../../../ui/vote/vote.component';
+import { VotingGenericTableComponent } from '../../../ui/voting-generic-table/voting-generic-table.component';
 import { Candidate, ElectionParticipants, Voter } from '../../../util/models/voting-models';
 
 @Component({
   selector: 'lib-voting-container',
   standalone: true,
-  imports: [CommonModule, MatDividerModule, VoteComponent, GenericTableComponent],
+  imports: [CommonModule, MatDividerModule, VoteComponent, VotingGenericTableComponent],
   templateUrl: './voting-container.component.html',
   styleUrl: './voting-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

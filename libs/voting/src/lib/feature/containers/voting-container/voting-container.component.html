@@ -8,7 +8,7 @@
 
   <div class="row my-5">
     <div class="col">
-      <lib-generic-table
+      <lib-voting-generic-table
         [dataSource$]="votersState$"
         [newRow]="{ name: '', voted: false }"
         title="Voters"
@@ -16,10 +16,10 @@
         (add)="addVoter($event)"
         (remove)="removeVoter($event)"
         (update)="updateVoter($event)"
-      ></lib-generic-table>
+      ></lib-voting-generic-table>
     </div>
     <div class="col">
-      <lib-generic-table
+      <lib-voting-generic-table
         [dataSource$]="candidatesState$"
         [newRow]="{ name: '', votes: 0 }"
         title="Candidates"
@@ -27,7 +27,7 @@
         (add)="addCandidate($event)"
         (remove)="removeCandidate($event)"
         (update)="updateCandidate($event)"
-      ></lib-generic-table>
+      ></lib-voting-generic-table>
     </div>
   </div>
 
