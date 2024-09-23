@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDividerModule } from '@angular/material/divider';
 import { BehaviorSubject, combineLatest, map, tap } from 'rxjs';
@@ -16,20 +16,10 @@ import { Candidate, ElectionParticipants, Voter } from '../../../util/models/vot
   styleUrl: './voting-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VotingContainerComponent implements OnInit {
+export class VotingContainerComponent {
   private destroyRef = inject(DestroyRef);
 
   constructor(private readonly apiService: ApiService) {}
-
-  ngOnInit(): void {
-    this.votersState$.subscribe((data) => {
-      console.log(data);
-    });
-
-    this.candidatesState$.subscribe((data) => {
-      console.log(data);
-    });
-  }
 
   public votersState$ = new BehaviorSubject<Voter[]>([]);
   public candidatesState$ = new BehaviorSubject<Candidate[]>([]);
