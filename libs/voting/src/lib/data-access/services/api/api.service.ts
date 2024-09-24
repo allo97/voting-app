@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Voter } from '../../../util/models/voting-models';
-import { Candidate } from './../../../util/models/voting-models';
+import { Person } from '../../../util/models/voting-models';
 
 const config = {
   voterApi: 'http://localhost:5046/api/voter',
   candidateApi: 'http://localhost:5046/api/candidate',
-  api: 'http://localhost:5046/api/'
+  api: 'http://localhost:5046/api'
 };
 
 @Injectable({
@@ -16,40 +15,16 @@ const config = {
 export class ApiService {
   constructor(private http: HttpClient) {}
 
-  public getAllVoters = (): Observable<Voter[]> => this.http.get<Voter[]>(`${config.voterApi}`);
+  public getAll = <T extends Person>(route: string): Observable<T[]> => this.http.get<T[]>(`${config.api}/${route}`);
 
-  public getVoterById = (id: number): Observable<Voter> => this.http.get<Voter>(`${config.voterApi}/${id}`);
+  public getById = <T extends Person>(id: number, route: string): Observable<T> =>
+    this.http.get<T>(`${config.api}/${route}/${id}`);
 
-  public createVoter = (voter: Voter): Observable<Voter> => this.http.post<Voter>(`${config.voterApi}`, voter);
+  public create = <T extends Person>(person: T, route: string): Observable<T> =>
+    this.http.post<T>(`${config.api}/${route}`, person);
 
-  public updateVoter = (id: number, voter: Voter): Observable<void> =>
-    this.http.put<void>(`${config.voterApi}/${id}`, voter);
-
-  public deleteVoter = (id: number): Observable<void> => this.http.delete<void>(`${config.voterApi}/${id}`);
-
-  public getAllCandidates = (): Observable<Candidate[]> => this.http.get<Candidate[]>(`${config.candidateApi}`);
-
-  public getCandidateById = (id: string): Observable<Candidate> =>
-    this.http.get<Candidate>(`${config.candidateApi}/${id}`);
-
-  public createCandidate = (candidate: Candidate): Observable<Candidate> =>
-    this.http.post<Candidate>(`${config.candidateApi}`, candidate);
-
-  public updateCandidate = (id: number, candidate: Candidate): Observable<void> =>
-    this.http.put<void>(`${config.candidateApi}/${id}`, candidate);
-
-  public deleteCandidate = (id: number): Observable<void> => this.http.delete<void>(`${config.candidateApi}/${id}`);
-
-  public getAll = (route: string): Observable<Voter[]> => this.http.get<Voter[]>(`${config.api}/${route}`);
-
-  public getById = (id: number, route: string): Observable<Voter> =>
-    this.http.get<Voter>(`${config.api}/${route}/${id}`);
-
-  public create = (voter: Voter, route: string): Observable<Voter> =>
-    this.http.post<Voter>(`${config.api}/${route}`, voter);
-
-  public update = (id: number, voter: Voter, route: string): Observable<void> =>
-    this.http.put<void>(`${config.api}/${route}/${id}`, voter);
+  public update = <T extends Person>(id: number, person: T, route: string): Observable<void> =>
+    this.http.put<void>(`${config.api}/${route}/${id}`, person);
 
   public delete = (id: number, route: string): Observable<void> =>
     this.http.delete<void>(`${config.api}/${route}/${id}`);

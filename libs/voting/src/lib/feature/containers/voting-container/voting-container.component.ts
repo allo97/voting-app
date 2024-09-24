@@ -18,13 +18,18 @@ import { Candidate, ElectionParticipants, Voter } from '../../../util/models/vot
 })
 export class VotingContainerComponent {
   private destroyRef = inject(DestroyRef);
+  private voterRoute = 'voter';
+  private candidateRoute = 'candidate';
 
   constructor(private readonly apiService: ApiService) {}
 
   public votersState$ = new BehaviorSubject<Voter[]>([]);
   public candidatesState$ = new BehaviorSubject<Candidate[]>([]);
 
-  public vm$ = combineLatest([this.apiService.getAllVoters(), this.apiService.getAllCandidates()]).pipe(
+  public vm$ = combineLatest([
+    this.apiService.getAll(this.voterRoute),
+    this.apiService.getAll(this.candidateRoute)
+  ]).pipe(
     map(([voters, candidates]) => ({ voters, candidates } as ElectionParticipants)),
     tap((electionParticipants) => {
       this.votersState$.next(electionParticipants.voters);
@@ -34,7 +39,7 @@ export class VotingContainerComponent {
 
   public addVoter(voter: Voter) {
     this.apiService
-      .createVoter(voter)
+      .create(voter, this.voterRoute)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((newVoter) => {
         this.votersState$?.next([...this.votersState$.value, newVoter]);
@@ -43,7 +48,7 @@ export class VotingContainerComponent {
 
   public removeVoter(id: number) {
     this.apiService
-      .deleteVoter(id)
+      .delete(id, this.voterRoute)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.votersState$?.next([...this.votersState$.value.slice(0, -1)]);
@@ -53,7 +58,7 @@ export class VotingContainerComponent {
   public updateVoter(voter: Voter) {
     if (voter.id)
       this.apiService
-        .updateVoter(voter.id, voter)
+        .update(voter.id, voter, this.voterRoute)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.votersState$?.next(this.votersState$.value);
@@ -62,7 +67,7 @@ export class VotingContainerComponent {
 
   public addCandidate(candidate: Candidate) {
     this.apiService
-      .createCandidate(candidate)
+      .create(candidate, this.candidateRoute)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((newCandidate) => {
         this.candidatesState$?.next([...this.candidatesState$.value, newCandidate]);
@@ -71,7 +76,7 @@ export class VotingContainerComponent {
 
   public removeCandidate(id: number) {
     this.apiService
-      .deleteCandidate(id)
+      .delete(id, this.candidateRoute)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.candidatesState$?.next([...this.candidatesState$.value.slice(0, -1)]);
@@ -81,7 +86,7 @@ export class VotingContainerComponent {
   public updateCandidate(candidate: Candidate) {
     if (candidate.id)
       this.apiService
-        .updateCandidate(candidate.id, candidate)
+        .update(candidate.id, candidate, this.candidateRoute)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(() => {
           this.candidatesState$?.next(this.candidatesState$.value);
